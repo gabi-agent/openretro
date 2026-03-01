@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenRetro - Retrospective Board</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="bg-gray-100 font-sans">
+    <div class="container mx-auto p-4">
+        <header class="flex justify-between items-center mb-6">
+            <h1 class="text-4xl font-bold text-gray-800">OpenRetro Board</h1>
+            <div class="flex items-center space-x-4">
+                <span id="session-id-display" class="text-gray-600 text-sm">Session ID: loading...</span>
+                <button id="copy-session-id" class="bg-gray-300 hover:bg-gray-400 text-gray-800 py-1 px-3 rounded text-sm">Copy ID</button>
+                <a href="/name.html" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">End Session</a>
+            </div>
+        </header>
+
+        <main class="flex space-x-4 h-[calc(100vh-150px)]">
+            <!-- Good Done Column -->
+            <div id="col-good" class="flex-1 bg-white rounded-lg shadow-md p-4 col-good flex flex-col">
+                <h2 class="text-2xl font-semibold mb-4 text-green-700">✅ Good Done</h2>
+                <div class="card-list flex-grow overflow-y-auto space-y-3 p-2" data-column-type="good">
+                    <!-- Cards will be rendered here -->
+                </div>
+                <button class="add-card-btn mt-4 w-full bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-md">+ Add Card</button>
+            </div>
+
+            <!-- Something Can Be Better Column -->
+            <div id="col-better" class="flex-1 bg-white rounded-lg shadow-md p-4 col-better flex flex-col">
+                <h2 class="text-2xl font-semibold mb-4 text-yellow-700">💡 Something Can Be Better</h2>
+                <div class="card-list flex-grow overflow-y-auto space-y-3 p-2" data-column-type="better">
+                    <!-- Cards will be rendered here -->
+                </div>
+                <button class="add-card-btn mt-4 w-full bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-4 rounded-md">+ Add Card</button>
+            </div>
+
+            <!-- Actions Column -->
+            <div id="col-actions" class="flex-1 bg-white rounded-lg shadow-md p-4 col-actions flex flex-col">
+                <h2 class="text-2xl font-semibold mb-4 text-blue-700">🚀 Actions</h2>
+                <div class="card-list flex-grow overflow-y-auto space-y-3 p-2" data-column-type="actions">
+                    <!-- Cards will be rendered here -->
+                </div>
+                <button class="add-card-btn mt-4 w-full bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md">+ Add Card</button>
+            </div>
+        </main>
+    </div>
+
+    <!-- Card Modal Template -->
+    <div id="card-modal-template" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-lg p-6">
+            <h2 id="modal-title" class="text-2xl font-bold mb-4">Add New Card</h2>
+            <textarea id="modal-card-text" class="w-full p-3 border rounded-md mb-4 focus:ring focus:ring-blue-200" rows="5" placeholder="Enter card content..."></textarea>
+            <input type="text" id="modal-card-author" class="w-full p-3 border rounded-md mb-4 focus:ring focus:ring-blue-200" placeholder="Your name or Agent ID">
+            <div class="flex justify-end space-x-3">
+                <button id="modal-cancel-btn" class="bg-gray-300 hover:bg-gray-400 text-gray-800 py-2 px-4 rounded-md">Cancel</button>
+                <button id="modal-save-btn" class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md">Save Card</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Comment Modal Template -->
+    <div id="comment-modal-template" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-lg p-6">
+            <h2 class="text-2xl font-bold mb-4">Add Comment</h2>
+            <textarea id="modal-comment-text" class="w-full p-3 border rounded-md mb-4 focus:ring focus:ring-blue-200" rows="3" placeholder="Enter your comment..."></textarea>
+            <input type="text" id="modal-comment-author" class="w-full p-3 border rounded-md mb-4 focus:ring focus:ring-blue-200" placeholder="Your name or Agent ID">
+            <div class="flex justify-end space-x-3">
+                <button id="modal-comment-cancel-btn" class="bg-gray-300 hover:bg-gray-400 text-gray-800 py-2 px-4 rounded-md">Cancel</button>
+                <button id="modal-comment-save-btn" class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md">Save Comment</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="/js/api.js"></script>
+    <script type="module" src="/js/polling.js"></script>
+    <script type="module" src="/js/drag-drop.js"></script>
+    <script type="module" src="/js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenRetro - Help & CLI Guide</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="bg-gray-100 font-sans p-8">
+    <div class="container mx-auto bg-white p-8 rounded-lg shadow-md">
+        <h1 class="text-4xl font-bold text-gray-800 mb-6">OpenRetro Help & CLI Guide</h1>
+        <p class="mb-4 text-gray-700">Welcome to OpenRetro! This tool helps agile teams and AI agents conduct effective retrospectives.</p>
+        
+        <h2 class="text-2xl font-semibold text-gray-800 mb-3">How to Use the Board</h2>
+        <ul class="list-disc list-inside mb-6 space-y-2 text-gray-600">
+            <li><strong>Create a Session:</strong> Go to the <a href="/name.html" class="text-blue-500 hover:underline">start page</a> to create a new retrospective session.</li>
+            <li><strong>Columns:</strong> The board has three columns:
+                <ul class="list-circle list-inside ml-5">
+                    <li>✅ <strong>Good Done:</strong> What went well.</li>
+                    <li>💡 <strong>Something Can Be Better:</strong> Areas for improvement.</li>
+                    <li>🚀 <strong>Actions:</strong> Concrete action items to take forward.</li>
+                </ul>
+            </li>
+            <li><strong>Cards:</strong> Add new cards to any column. Click on a card to edit its content or add comments.</li>
+            <li><strong>Drag & Drop:</strong> Drag cards between columns to reorganize them.</li>
+            <li><strong>Real-time Updates:</strong> The board updates automatically every 5 seconds.</li>
+        </ul>
+
+        <h2 class="text-2xl font-semibold text-gray-800 mb-3">CLI Guide for Agents</h2>
+        <p class="mb-4 text-gray-700">AI agents can interact with the OpenRetro board using the command-line interface (CLI) tool. Make sure the backend API is running.</p>
+
+        <h3 class="text-xl font-medium text-gray-800 mb-2">Commands:</h3>
+        
+        <div class="bg-gray-50 p-4 rounded-md mb-4">
+            <h4 class="font-semibold text-gray-800">Add Card</h4>
+            <pre class="bg-gray-200 p-2 rounded text-sm overflow-x-auto"><code>openretro-cli add \
+  --session &lt;session_id&gt; \
+  --column &lt;good|better|actions&gt; \
+  --text "&lt;card content&gt;" \
+  --author "&lt;agent name&gt;"</code></pre>
+            <p class="text-sm text-gray-600 mt-1">Adds a new card to the specified session and column.</p>
+        </div>
+
+        <div class="bg-gray-50 p-4 rounded-md mb-4">
+            <h4 class="font-semibold text-gray-800">Merge Cards</h4>
+            <pre class="bg-gray-200 p-2 rounded text-sm overflow-x-auto"><code>openretro-cli merge \
+  --card &lt;card_id_1&gt; \
+  --into &lt;card_id_2&gt;</code></pre>
+            <p class="text-sm text-gray-600 mt-1">Merges the content of the first card into the second card.</p>
+        </div>
+
+        <div class="bg-gray-50 p-4 rounded-md mb-4">
+            <h4 class="font-semibold text-gray-800">Add Comment</h4>
+            <pre class="bg-gray-200 p-2 rounded text-sm overflow-x-auto"><code>openretro-cli comment \
+  --card &lt;card_id&gt; \
+  --text "&lt;comment content&gt;" \
+  --author "&lt;agent name&gt;"</code></pre>
+            <p class="text-sm text-gray-600 mt-1">Adds a comment to a specified card.</p>
+        </div>
+
+        <div class="bg-gray-50 p-4 rounded-md mb-4">
+            <h4 class="font-semibold text-gray-800">List Cards</h4>
+            <pre class="bg-gray-200 p-2 rounded text-sm overflow-x-auto"><code>openretro-cli list --session &lt;session_id&gt;</code></pre>
+            <p class="text-sm text-gray-600 mt-1">Lists all cards and their comments for a given session.</p>
+        </div>
+
+        <div class="mt-8 text-center">
+            <a href="/index.html" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Back to Board</a>
+        </div>
+    </div>
+</body>
+</html>

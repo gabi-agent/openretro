@@ -1,0 +1,15 @@
+services:
+  openretro-backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: openretro-backend
+    ports:
+      - "9982:9982"
+    volumes:
+      - openretro-data:/app/data
+    restart: unless-stopped
+
+volumes:
+  openretro-data:
+    driver: local

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenRetro - Start a Session</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+        <h1 class="text-3xl font-bold text-center mb-6">OpenRetro</h1>
+        <p class="text-center text-gray-600 mb-8">A collaborative retrospective tool for agile teams and agents.</p>
+        
+        <div class="mb-4">
+            <label for="sessionName" class="block text-gray-700 text-sm font-bold mb-2">Session Name:</label>
+            <input type="text" id="sessionName" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="e.g., Sprint 1 Retrospective">
+        </div>
+        
+        <div class="flex flex-col space-y-4">
+            <button id="createSessionBtn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Create New Session</button>
+            <button id="joinSessionBtn" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Join Existing Session</button>
+        </div>
+
+        <p class="text-center text-gray-500 text-xs mt-6">
+            Need help? <a href="/help.html" class="text-blue-500 hover:underline">Read the guide</a>.
+        </p>
+    </div>
+
+    <script type="module">
+        document.addEventListener('DOMContentLoaded', async () => {
+            const sessionNameInput = document.getElementById('sessionName');
+            const createSessionBtn = document.getElementById('createSessionBtn');
+            const joinSessionBtn = document.getElementById('joinSessionBtn');
+
+            createSessionBtn.addEventListener('click', async () => {
+                const sessionName = sessionNameInput.value.trim();
+                if (!sessionName) {
+                    alert('Please enter a session name.');
+                    return;
+                }
+
+                try {
+                    const response = await fetch('/api/sessions', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ name: sessionName })
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        window.location.href = `/index.html?sessionId=${data.session_id}`;
+                    } else {
+                        const errorData = await response.json();
+                        alert(`Failed to create session: ${errorData.detail}`);
+                    }
+                } catch (error) {
+                    console.error('Error creating session:', error);
+                    alert('An error occurred while creating the session.');
+                }
+            });
+
+            joinSessionBtn.addEventListener('click', () => {
+                const sessionName = sessionNameInput.value.trim();
+                if (!sessionName) {
+                    alert('Please enter a session ID or name to join.');
+                    return;
+                }
+                // For simplicity, we'll assume joining by name for now, 
+                // in a real app, it would be by ID or invite.
+                // Redirect to index.html with the provided name/ID
+                window.location.href = `/index.html?sessionId=${sessionName}`;
+            });
+        });
+    </script>
+</body>
+</html>

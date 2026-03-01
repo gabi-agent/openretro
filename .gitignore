@@ -1,0 +1,116 @@
+# OpenRetro .gitignore
+
+# Databases
+*.db
+*.db-shm
+*.db-wal
+openretro.db
+memory.db
+vector_store.db
+
+# Environment & Secrets
+.env
+.env.*
+.env-*
+!.env.example
+*.key
+*.pem
+*.secret
+_secrets/
+secrets/
+*.token
+
+# OpenClaw Workspace (should NOT be in OpenRetro repo)
+.openclaw/
+agents/
+.skills/
+clawhub/
+.shared/
+projects/unico/
+projects/smartsolar*/
+smartsolar*/
+Unico/
+unico/
+workflow-test-smartsolar/
+health-*/
+adauto-knowledge/
+knowledge/
+*.openai
+
+# Logs
+*.log
+mem0_*.log
+*_check.log
+
+# Node.js / Python cache
+node_modules/
+__pycache__/
+*.pyc
+*.pyo
+venv/
+env/
+.venv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build artifacts
+dist/
+build/
+*.egg-info/
+
+# Docker volumes
+qdrant_storage/
+
+# Temporary files
+*.tmp
+*.bak
+*.backup
+.cache/
+
+# Scripts & Tools (workspace-specific)
+*.sh
+apply_*.js
+extract_*.js
+fix_*.js
+push_*.js
+setup_*.js
+
+# Workspace config (should NOT be in repo)
+HEARTBEAT.md
+IDENTITY.md
+SOUL.md
+USER.md
+TOOLS.md
+BOOTSTRAP.md
+AGENT*.md
+TEAM*.md
+RULES.md
+PROJECT*.md
+LEARNING*.md
+README-*.md
+SLACK-FORMAT.md
+WORKFLOW*.md
+TROUBLESHOOTING.md
+
+# JSON exports
+memories_extracted.json
+*_extracted.json
+workspace-state.json
+
+# Docker compose (other projects)
+docker-compose.yml
+!docker-compose.openretro.yml
+
+# Test outputs
+*_TEST_*.xlsx
+*_TEST_*.pdf
+Sample_*.pdf
+Sample_*.xlsx
