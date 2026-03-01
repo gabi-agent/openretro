@@ -1,0 +1,69 @@
+name: Require Resolution Comment on Issue Close
+
+on:
+  issues:
+    types: [closed]
+
+permissions:
+  issues: write
+
+jobs:
+  check-resolution:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check for resolution comment
+        run: |
+          echo "Checking issue has resolution comment..."
+          
+          # Check if issue has at least 3 comments (one must be resolution)
+          COMMENT_COUNT="${{ github.event.issue.comments }}"
+          
+          if [ "$COMMENT_COUNT" -lt 2 ]; then
+            echo "::error::Issue closed without resolution comment."
+            exit 1
+          fi
+          
+          echo "✅ Issue has resolution comment(s)"
+          
+      - name: Reopen issue if missing resolution
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.update({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              body: `## ⚠️ Issue Reopened - Missing Resolution
+
+This issue was closed without a resolution comment documenting:
+- What was done to fix it
+- How it was tested
+- Verification steps
+
+**Action Required:**
+Please add a resolution comment before closing this issue.
+
+---
+
+*Automated enforcement by GitHub Actions*`
+            })
+            
+      - name: Comment on closed issue with resolution
+        if: success()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `## ✅ Issue Closed - Resolution Documented
+
+Thank you for resolving this issue. The resolution has been recorded in comments for tracking.
+
+---
+
+*Automated enforcement by GitHub Actions*`
+            })

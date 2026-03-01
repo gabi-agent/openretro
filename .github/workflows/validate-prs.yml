@@ -1,0 +1,72 @@
+name: Validate PR Templates
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize]
+
+permissions:
+  pull-requests: write
+
+jobs:
+  validate-pr:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request' && (github.event.action == 'opened' || github.event.action == 'edited')
+    steps:
+      - name: Check mandatory checklist
+        run: |
+          echo "Checking PR body for mandatory checklist..."
+          BODY="${{ github.event.pull_request.body }}"
+          
+          # Check for Description section
+          if ! echo "$BODY" | grep -q "## 📝 Description"; then
+            echo "::error::Missing 'Description' section. Please complete the mandatory checklist."
+            exit 1
+          fi
+          
+          # Check for Related Issue
+          if ! echo "$BODY" | grep -q "## 🔗 Related Issue"; then
+            echo "::error::Missing 'Related Issue' section. Please link to the issue this PR closes."
+            exit 1
+          fi
+          
+          # Check for Acceptance Criteria
+          if ! echo "$BODY" | grep -q "## ✅ Acceptance Criteria"; then
+            echo "::error::Missing 'Acceptance Criteria' section. Please complete the mandatory checklist."
+            exit 1
+          fi
+          
+          # Check for Testing section
+          if ! echo "$BODY" | grep -q "## 🧪 Testing"; then
+            echo "::error::Missing 'Testing' section. Please describe testing performed."
+            exit 1
+          fi
+          
+          echo "✅ PR template validation passed!"
+          
+      - name: Comment on missing fields
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.pulls.createReview({
+              pull_number: context.pullRequest.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              event: "APPROVE",
+              body: `## ❌ Template Validation Failed
+
+This PR does not meet the mandatory checklist requirements from PULL_REQUEST_TEMPLATE.md.
+
+**Missing sections:**
+- [ ] 📝 Description
+- [ ] 🔗 Related Issue
+- [ ] ✅ Acceptance Criteria
+- [ ] 🧪 Testing
+
+**Action Required:**
+Please read \`PULL_REQUEST_TEMPLATE.md\` and complete all required fields before submitting this PR.
+
+---
+
+*Automated check by GitHub Actions*`
+            })

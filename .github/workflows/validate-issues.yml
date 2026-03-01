@@ -1,0 +1,66 @@
+name: Validate Issue Templates
+
+on:
+  issues:
+    types: [opened, edited, reopened]
+  issue_comment:
+    types: [created]
+
+permissions:
+  issues: write
+
+jobs:
+  validate-issue:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'issues' && (github.event.action == 'opened' || github.event.action == 'edited')
+    steps:
+      - name: Check mandatory fields
+        run: |
+          echo "Checking issue body for mandatory fields..."
+          BODY="${{ github.event.issue.body }}"
+          
+          # Check for Description section
+          if ! echo "$BODY" | grep -q "## Description"; then
+            echo "::error::Missing 'Description' section. Please complete the mandatory checklist."
+            exit 1
+          fi
+          
+          # Check for Acceptance Criteria section
+          if ! echo "$BODY" | grep -q "## Acceptance Criteria"; then
+            echo "::error::Missing 'Acceptance Criteria' section. Please complete the mandatory checklist."
+            exit 1
+          fi
+          
+          # Check for Test Plan section
+          if ! echo "$BODY" | grep -q "## Test Plan"; then
+            echo "::error::Missing 'Test Plan' section. Please complete the mandatory checklist."
+            exit 1
+          fi
+          
+          echo "✅ Issue template validation passed!"
+          
+      - name: Comment on missing fields
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `## ❌ Template Validation Failed
+
+This issue does not meet the mandatory checklist requirements from ISSUE-TEMPLATE.md.
+
+**Missing sections:**
+- [ ] Description
+- [ ] Acceptance Criteria  
+- [ ] Test Plan
+
+**Action Required:**
+Please read \`ISSUE-TEMPLATE.md\` and complete all required fields before submitting this issue.
+
+---
+
+*Automated check by GitHub Actions*`
+            })
