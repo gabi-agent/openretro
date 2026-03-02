@@ -21,13 +21,13 @@ class SessionResponse(SessionBase):
 class CardBase(BaseModel):
     author: str = Field(..., max_length=100)
     column_type: str = Field(..., pattern="^(good|better|actions)$")
-    text: str = Field(..., max_length=500)
+    text: str = Field(..., max_length=2000)
 
 class CardCreate(CardBase):
     pass
 
 class CardUpdate(BaseModel):
-    text: Optional[str] = Field(None, max_length=500)
+    text: Optional[str] = Field(None, max_length=2000)
     position: Optional[int] = None
     column_type: Optional[str] = Field(None, pattern="^(good|better|actions)$")
 
