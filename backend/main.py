@@ -2,12 +2,18 @@ from fastapi import FastAPI
 from .routers import sessions, cards, comments
 from fastapi.staticfiles import StaticFiles
 import os
+from datetime import datetime
 
 app = FastAPI(
     title="OpenRetro API",
     description="API for OpenRetro - a retrospective tool",
     version="1.0.0",
 )
+
+# Health check endpoint (must be before static files mount)
+@app.get("/health")
+def health_check():
+    return {"status": "healthy", "timestamp": datetime.utcnow().isoformat()}
 
 # Include API routers
 app.include_router(sessions.router, prefix="/api")
