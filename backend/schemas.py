@@ -30,18 +30,39 @@ class CardUpdate(BaseModel):
     text: Optional[str] = Field(None, max_length=2000)
     position: Optional[int] = None
     column_type: Optional[str] = Field(None, pattern="^(good|better|actions)$")
+    status: Optional[str] = Field(None, pattern="^(open|in_progress|resolved)$")
 
 class CardResponse(CardBase):
     card_id: str
     session_id: str
     position: int
     merged_into: Optional[str] = None
+    status: str
     created_at: datetime
     updated_at: datetime
     comments: List["CommentResponse"] = [] # Forward reference
+    links: List["CardLinkResponse"] = []
 
     class Config:
         from_attributes = True
+
+class CardLinkRequest(BaseModel):
+    action_card_id: str
+    better_card_id: str
+    author: str
+
+class CardLinkResponse(BaseModel):
+    link_id: str
+    action_card_id: str
+    better_card_id: str
+    created_at: datetime
+    created_by: str
+
+    class Config:
+        from_attributes = True
+
+class CardStatusUpdate(BaseModel):
+    status: str = Field(..., pattern="^(open|in_progress|resolved)$")
 
 class CardMergeRequest(BaseModel):
     into_card_id: str
@@ -70,3 +91,4 @@ class CommentResponse(CommentBase):
 # Update forward refs
 SessionResponse.model_rebuild()
 CardResponse.model_rebuild()
+CardLinkResponse.model_rebuild()
