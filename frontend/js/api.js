@@ -57,4 +57,12 @@ export const api = {
 
     // Comment Management
     addComment: (cardId, commentData) => callApi('POST', `cards/${cardId}/comments`, commentData),
+
+    // NEW: Link Management
+    linkCards: (actionCardId, betterCardId) => callApi('POST', `cards/${actionCardId}/link/${betterCardId}`),
+    unlinkCards: (actionCardId, betterCardId) => callApi('DELETE', `cards/${actionCardId}/unlink/${betterCardId}`),
+    getLinkedCards: (cardId) => callApi('GET', `cards/${cardId}/links`),
+
+    // NEW: Status Management
+    updateCardStatus: (cardId, status) => callApi('PATCH', `cards/${cardId}/status`, { status }),
 };
