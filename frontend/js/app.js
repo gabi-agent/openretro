@@ -168,6 +168,38 @@ async function deleteCard(cardId) {
 
 
 // --- Modal Logic ---
+// Character counter configuration
+const MAX_CHARACTERS = 2000; // Backend limit (ACTION-E1 increased to 2000)
+
+function updateCharacterCounter(textarea) {
+    const currentLength = textarea.value.length;
+    const remaining = MAX_CHARACTERS - currentLength;
+    const percentage = (currentLength / MAX_CHARACTERS) * 100;
+
+    // Find or create counter element
+    let counterElement = textarea.parentElement.querySelector('.char-counter');
+    if (!counterElement) {
+        counterElement = document.createElement('div');
+        counterElement.classList.add('char-counter', 'text-sm', 'mt-2', 'text-right');
+        textarea.parentElement.appendChild(counterElement);
+    }
+
+    // Update counter text and color based on percentage
+    if (percentage >= 100) {
+        counterElement.textContent = `${currentLength}/${MAX_CHARACTERS} ⚠️ Limit exceeded!`;
+        counterElement.className = 'char-counter text-sm mt-2 text-right text-red-600 font-bold';
+    } else if (percentage >= 95) {
+        counterElement.textContent = `${currentLength}/${MAX_CHARACTERS} (${remaining} remaining) ⚠️ Near limit`;
+        counterElement.className = 'char-counter text-sm mt-2 text-right text-red-500 font-semibold';
+    } else if (percentage >= 90) {
+        counterElement.textContent = `${currentLength}/${MAX_CHARACTERS} (${remaining} remaining)`;
+        counterElement.className = 'char-counter text-sm mt-2 text-right text-yellow-600 font-semibold';
+    } else {
+        counterElement.textContent = `${currentLength}/${MAX_CHARACTERS} (${remaining} remaining)`;
+        counterElement.className = 'char-counter text-sm mt-2 text-right text-gray-600';
+    }
+}
+
 function openCardModal(columnType, card = null) {
     const modal = document.getElementById('card-modal');
     const title = modal.querySelector('#modal-title');
@@ -183,20 +215,33 @@ function openCardModal(columnType, card = null) {
         cardText.value = card.text;
         cardAuthor.value = card.author;
         saveBtn.textContent = 'Save Changes';
+        // Update counter on edit
+        updateCharacterCounter(cardText);
     } else {
         title.textContent = 'Add New Card';
         cardText.value = '';
         cardAuthor.value = currentAuthor;
         saveBtn.textContent = 'Save Card';
+        // Reset counter on new card
+        updateCharacterCounter(cardText);
     }
 
     modal.classList.remove('hidden');
+
+    // Setup character counter event listener for real-time updates
+    cardText.addEventListener('input', () => updateCharacterCounter(cardText));
 
     const saveHandler = async () => {
         const text = cardText.value.trim();
         const author = cardAuthor.value.trim();
         if (!text || !author) {
             alert('Card content and author cannot be empty.');
+            return;
+        }
+
+        // Validate character limit
+        if (text.length > MAX_CHARACTERS) {
+            alert(`Card text exceeds ${MAX_CHARACTERS} character limit. Please reduce to ${MAX_CHARACTERS} characters or less.`);
             return;
         }
 
@@ -260,4 +305,13 @@ function closeModal(modal) {
     const cancelBtn = modal.querySelector('#modal-cancel-btn') || modal.querySelector('#modal-comment-cancel-btn');
     if (saveBtn) saveBtn.onclick = null;
     if (cancelBtn) cancelBtn.onclick = null;
+
+    // Clean up character counter element if present (for card modal)
+    const cardText = modal.querySelector('#modal-card-text');
+    if (cardText) {
+        const counterElement = cardText.parentElement.querySelector('.char-counter');
+        if (counterElement) {
+            counterElement.remove();
+        }
+    }
 }
