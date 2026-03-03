@@ -25,6 +25,71 @@ def create_card(
     db.refresh(db_card)
     return db_card
 
+# Issue #4: Link routes MUST come before /cards/{card_id} routes
+@router.post("/cards/link", response_model=schemas.CardLinkResponse)
+def link_cards(
+    link_request: schemas.CardLinkRequest,
+    db: DBSession = Depends(get_db)
+):
+    action_card = db.query(models.Card).filter(models.Card.card_id == link_request.action_card_id).first()
+    better_card = db.query(models.Card).filter(models.Card.card_id == link_request.better_card_id).first()
+
+    if not action_card or not better_card:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="One or both cards not found")
+    
+    # SECURITY: Ensure cards being linked belong to the same session
+    if action_card.session_id != better_card.session_id:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Cards must be in the same session to be linked"
+        )
+    
+    if action_card.column_type != "actions" or better_card.column_type != "better":
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Must link an Action card to a Better card")
+
+    # Check if link already exists
+    existing_link = db.query(models.CardLink).filter(
+        models.CardLink.action_card_id == link_request.action_card_id,
+        models.CardLink.better_card_id == link_request.better_card_id
+    ).first()
+
+    if existing_link:
+        return existing_link
+
+    db_link = models.CardLink(
+        action_card_id=link_request.action_card_id,
+        better_card_id=link_request.better_card_id,
+        created_by=link_request.author
+    )
+    db.add(db_link)
+
+    # Auto-update status to 'in_progress' when linked
+    if better_card.status == "open":
+        better_card.status = "in_progress"
+
+    db.commit()
+    db.refresh(db_link)
+    return db_link
+
+@router.delete("/cards/link", status_code=status.HTTP_204_NO_CONTENT)
+def unlink_cards(
+    action_card_id: str,
+    better_card_id: str,
+    db: DBSession = Depends(get_db)
+):
+    db_link = db.query(models.CardLink).filter(
+        models.CardLink.action_card_id == action_card_id,
+        models.CardLink.better_card_id == better_card_id
+    ).first()
+
+    if not db_link:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Link not found")
+    
+    db.delete(db_link)
+    db.commit()
+    return
+
+# Parameterized routes come AFTER specific routes
 @router.put("/cards/{card_id}", response_model=schemas.CardResponse)
 def update_card(
     card_id: str,
@@ -51,6 +116,21 @@ def delete_card(card_id: str, db: DBSession = Depends(get_db)):
     db.delete(db_card)
     db.commit()
     return
+
+@router.patch("/cards/{card_id}/status", response_model=schemas.CardResponse)
+def update_card_status(
+    card_id: str,
+    status_update: schemas.CardStatusUpdate,
+    db: DBSession = Depends(get_db)
+):
+    db_card = db.query(models.Card).filter(models.Card.card_id == card_id).first()
+    if not db_card:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Card not found")
+    
+    db_card.status = status_update.status
+    db.commit()
+    db.refresh(db_card)
+    return db_card
 
 @router.post("/cards/{card_id}/merge", response_model=schemas.CardMergeResponse)
 def merge_cards(
@@ -82,9 +162,6 @@ def merge_cards(
 
     db.commit()
     db.refresh(target_card)
-    # No need to refresh card_to_merge if it will be marked as merged and eventually not displayed
-    # db.refresh(card_to_merge)
-
 
     return schemas.CardMergeResponse(
         merged_card_id=card_id,

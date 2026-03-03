@@ -1,0 +1,81 @@
+{
+  "version": 1,
+  "skills": {
+    "architecture-designer": {
+      "version": "0.1.0",
+      "installedAt": 1771834798866
+    },
+    "architecture-patterns": {
+      "version": "1.0.0",
+      "installedAt": 1771834809118
+    },
+    "api-designer": {
+      "version": "0.1.0",
+      "installedAt": 1771834832406
+    },
+    "backend": {
+      "version": "1.0.0",
+      "installedAt": 1771834840913
+    },
+    "database-operations": {
+      "version": "1.0.0",
+      "installedAt": 1771834853428
+    },
+    "sql-toolkit": {
+      "version": "1.0.0",
+      "installedAt": 1771834864241
+    },
+    "coding": {
+      "version": "1.0.3",
+      "installedAt": 1771834884286
+    },
+    "frontend-design": {
+      "version": "1.0.0",
+      "installedAt": 1771834897214
+    },
+    "devops": {
+      "version": "1.0.0",
+      "installedAt": 1771834946842
+    },
+    "security-audit-toolkit": {
+      "version": "1.0.0",
+      "installedAt": 1771834996115
+    },
+    "dotnet-expert": {
+      "version": "1.0.0",
+      "installedAt": 1771835356543
+    },
+    "flutter": {
+      "version": "1.0.1",
+      "installedAt": 1771835366452
+    },
+    "agile-toolkit": {
+      "version": "1.0.0",
+      "installedAt": 1771835375064
+    },
+    "trello": {
+      "version": "1.0.0",
+      "installedAt": 1771835390368
+    },
+    "afrexai-sprint-retro": {
+      "version": "1.0.0",
+      "installedAt": 1771835417534
+    },
+    "projects": {
+      "version": "1.0.0",
+      "installedAt": 1771835430395
+    },
+    "jira": {
+      "version": "1.1.0",
+      "installedAt": 1771835837441
+    },
+    "github-cli": {
+      "version": "1.0.0",
+      "installedAt": 1771835847356
+    },
+    "openclaw-github-assistant": {
+      "version": "2.0.1",
+      "installedAt": 1771835858979
+    }
+  }
+}

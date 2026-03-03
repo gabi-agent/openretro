@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from .routers import sessions, cards, comments
+from .routers import sessions, cards, comments, tokens
 from fastapi.staticfiles import StaticFiles
 import os
 from datetime import datetime
@@ -19,6 +19,7 @@ def health_check():
 app.include_router(sessions.router, prefix="/api")
 app.include_router(cards.router, prefix="/api")
 app.include_router(comments.router, prefix="/api")
+app.include_router(tokens.router, prefix="/api")
 
 # Serve static files for frontend
 app.mount("/", StaticFiles(directory="frontend", html=True), name="frontend")
