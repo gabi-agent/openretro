@@ -37,6 +37,13 @@ def link_cards(
     if not action_card or not better_card:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="One or both cards not found")
     
+    # SECURITY: Ensure cards being linked belong to the same session
+    if action_card.session_id != better_card.session_id:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Cards must be in the same session to be linked"
+        )
+    
     if action_card.column_type != "actions" or better_card.column_type != "better":
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Must link an Action card to a Better card")
 
