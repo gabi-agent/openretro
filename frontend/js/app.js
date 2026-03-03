@@ -45,6 +45,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     commentModal.id = 'comment-modal';
     document.body.appendChild(commentModal);
 
+    // NEW: Link Modal setup
+    const linkModalTemplate = document.getElementById('link-modal-template');
+    const linkModal = linkModalTemplate.cloneNode(true);
+    linkModal.id = 'link-modal';
+    document.body.appendChild(linkModal);
 
     await fetchAndRenderBoard();
     startPolling(currentSessionId, renderBoard);
@@ -109,8 +114,27 @@ function createCardElement(card) {
     // Card Author
     const authorDiv = document.createElement('div');
     authorDiv.classList.add('card-author', 'text-xs', 'text-gray-500', 'text-right');
-    authorDiv.textContent = `— ${card.author} at ${new Date(card.created_at).toLocaleString()}`;
+    authorDiv.textContent = `- ${card.author} at ${new Date(card.created_at).toLocaleString()}`;
     cardDiv.appendChild(authorDiv);
+
+    // Status Badge (after card author, before comments)
+    if (card.status) {
+        const statusBadge = document.createElement('span');
+        statusBadge.classList.add('status-badge', 'inline-block', 'text-xs', 'px-2', 'py-1', 'rounded-full', 'font-bold', 'ml-2');
+
+        if (card.status === 'open') {
+            statusBadge.textContent = '⚪ Open';
+            statusBadge.classList.add('bg-gray-200', 'text-gray-700');
+        } else if (card.status === 'in_progress') {
+            statusBadge.textContent = '🔄 In Progress';
+            statusBadge.classList.add('bg-yellow-100', 'text-yellow-700');
+        } else if (card.status === 'resolved') {
+            statusBadge.textContent = '✅ Resolved';
+            statusBadge.classList.add('bg-green-100', 'text-green-700');
+        }
+
+        authorDiv.appendChild(statusBadge); // Append to authorDiv
+    }
 
     // Comments Section (if any)
     if (card.comments && card.comments.length > 0) {
@@ -120,13 +144,53 @@ function createCardElement(card) {
             const commentDiv = document.createElement('div');
             commentDiv.classList.add('comment-item', 'text-xs', 'bg-gray-50', 'p-2', 'rounded-sm', 'border-l-2', 'border-blue-400');
             commentDiv.innerHTML = `
-                <span class="font-semibold text-gray-800">${comment.author}</span>: 
+                <span class="font-semibold text-gray-800">${comment.author}</span>:
                 <span class="text-gray-700">${comment.text}</span>
                 <div class="text-right text-gray-400 mt-1">${new Date(comment.created_at).toLocaleString()}</div>
             `;
             commentsSection.appendChild(commentDiv);
         });
         cardDiv.appendChild(commentsSection);
+    }
+
+    // NEW: Resolves section for Action cards
+    if (card.column_type === 'actions' && card.resolves && card.resolves.length > 0) {
+        const resolvesSection = document.createElement('div');
+        resolvesSection.classList.add('resolves-section', 'border-t', 'border-blue-200', 'pt-2', 'mt-2', 'space-y-1');
+
+        const resolvesHeader = document.createElement('div');
+        resolvesHeader.classList.add('text-xs', 'font-semibold', 'text-blue-600', 'mb-1');
+        resolvesHeader.textContent = '📌 Resolves:';
+        resolvesSection.appendChild(resolvesHeader);
+
+        card.resolves.forEach(resolved => {
+            const resolveItem = document.createElement('div');
+            resolveItem.classList.add('resolve-item', 'text-xs', 'bg-blue-50', 'p-2', 'rounded-sm', 'mb-1', 'ml-4');
+            resolveItem.innerHTML = `<span class="font-medium text-gray-800">${resolved.text}</span>`;
+            resolvesSection.appendChild(resolveItem);
+        });
+
+        cardDiv.appendChild(resolvesSection);
+    }
+
+    // NEW: Resolved by section for Better cards
+    if (card.column_type === 'better' && card.resolved_by && card.resolved_by.length > 0) {
+        const resolvedBySection = document.createElement('div');
+        resolvedBySection.classList.add('resolved-by-section', 'border-t', 'border-blue-200', 'pt-2', 'mt-2', 'space-y-1');
+
+        const resolvedByHeader = document.createElement('div');
+        resolvedByHeader.classList.add('text-xs', 'font-semibold', 'text-blue-600', 'mb-1');
+        resolvedByHeader.textContent = '🔗 Resolved by:';
+        resolvedBySection.appendChild(resolvedByHeader);
+
+        card.resolved_by.forEach(action => {
+            const actionItem = document.createElement('div');
+            actionItem.classList.add('action-item', 'text-xs', 'bg-blue-50', 'p-2', 'rounded-sm', 'mb-1', 'ml-4');
+            actionItem.innerHTML = `<span class="font-medium text-gray-800">${action.text}</span>`;
+            resolvedBySection.appendChild(actionItem);
+        });
+
+        cardDiv.appendChild(resolvedBySection);
     }
 
     // Card Actions (Edit, Delete, Merge, Comment)
@@ -140,6 +204,21 @@ function createCardElement(card) {
     actionsDiv.appendChild(editBtn);
     actionsDiv.appendChild(deleteBtn);
     actionsDiv.appendChild(commentBtn);
+
+    // NEW: Mark Resolved button for Better cards
+    if (card.column_type === 'better') {
+        const markResolvedBtn = createActionButton('✅ Mark Resolved', 'mark-resolved-btn', () => markCardResolved(card.card_id));
+        // Only show if not already resolved
+        if (card.status !== 'resolved') {
+            actionsDiv.appendChild(markResolvedBtn);
+        }
+    }
+
+    // NEW: Link button for Action cards
+    if (card.column_type === 'actions') {
+        const linkBtn = createActionButton('🔗 Link', 'link-btn', () => openLinkModal(card.card_id));
+        actionsDiv.appendChild(linkBtn);
+    }
 
     cardDiv.appendChild(actionsDiv);
 
@@ -162,6 +241,18 @@ async function deleteCard(cardId) {
         } catch (error) {
             console.error('Error deleting card:', error);
             alert('Failed to delete card.');
+        }
+    }
+}
+
+async function markCardResolved(cardId) {
+    if (confirm('Are you sure you want to mark this card as RESOLVED?')) {
+        try {
+            await api.updateCardStatus(cardId, 'resolved');
+            await fetchAndRenderBoard(); // Re-render board after status update
+        } catch (error) {
+            console.error('Error marking card resolved:', error);
+            alert('Failed to mark card resolved.');
         }
     }
 }
@@ -260,4 +351,64 @@ function closeModal(modal) {
     const cancelBtn = modal.querySelector('#modal-cancel-btn') || modal.querySelector('#modal-comment-cancel-btn');
     if (saveBtn) saveBtn.onclick = null;
     if (cancelBtn) cancelBtn.onclick = null;
+}
+
+// --- Link Modal Logic ---
+async function openLinkModal(actionCardId) {
+    const modal = document.getElementById('link-modal');
+    const betterCardsContainer = modal.querySelector('#link-modal-better-cards');
+    const saveBtn = modal.querySelector('#link-modal-save-btn');
+    const cancelBtn = modal.querySelector('#link-modal-cancel-btn');
+
+    betterCardsContainer.innerHTML = ''; // Clear previous cards
+    modal.classList.remove('hidden');
+
+    try {
+        const sessionData = await api.getSession(currentSessionId);
+        const betterCards = sessionData.cards.filter(card => card.column_type === 'better' && card.card_id !== actionCardId);
+
+        if (betterCards.length === 0) {
+            betterCardsContainer.innerHTML = '<p class="text-gray-600">No "Better" cards available to link.</p>';
+            saveBtn.disabled = true;
+        } else {
+            saveBtn.disabled = false;
+            betterCards.forEach(card => {
+                const checkboxDiv = document.createElement('div');
+                checkboxDiv.classList.add('flex', 'items-center');
+                checkboxDiv.innerHTML = `
+                    <input type="checkbox" id="link-better-${card.card_id}" value="${card.card_id}" class="form-checkbox h-4 w-4 text-blue-600">
+                    <label for="link-better-${card.card_id}" class="ml-2 text-gray-700">${card.text} <span class="text-xs text-gray-500">(${card.author})</span></label>
+                `;
+                betterCardsContainer.appendChild(checkboxDiv);
+            });
+        }
+    } catch (error) {
+        console.error('Error fetching cards for linking:', error);
+        alert('Failed to load cards for linking.');
+        closeModal(modal);
+        return;
+    }
+
+    const saveHandler = async () => {
+        const selectedBetterCardIds = Array.from(betterCardsContainer.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.value);
+
+        if (selectedBetterCardIds.length === 0) {
+            alert('Please select at least one "Better" card to link.');
+            return;
+        }
+
+        try {
+            for (const betterCardId of selectedBetterCardIds) {
+                await api.linkCards(actionCardId, betterCardId);
+            }
+            closeModal(modal);
+            await fetchAndRenderBoard(); // Re-render to show updated links
+        } catch (error) {
+            console.error('Error linking cards:', error);
+            alert('Failed to link cards: ' + error.message);
+        }
+    };
+
+    saveBtn.onclick = saveHandler;
+    cancelBtn.onclick = () => closeModal(modal);
 }
