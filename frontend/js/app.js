@@ -111,16 +111,21 @@ function createCardElement(card) {
     contentDiv.textContent = card.text; // Use textContent to prevent XSS
     cardDiv.appendChild(contentDiv);
 
-    // Card Author
-    const authorDiv = document.createElement('div');
-    authorDiv.classList.add('card-author', 'text-xs', 'text-gray-500', 'text-right');
-    authorDiv.textContent = `- ${card.author} at ${new Date(card.created_at).toLocaleString()}`;
-    cardDiv.appendChild(authorDiv);
+    // Card Author & Status Badge Container
+    const authorBadgeContainer = document.createElement('div');
+    authorBadgeContainer.classList.add('flex', 'justify-between', 'items-center', 'mt-2', 'mb-2');
 
-    // Status Badge (after card author, before comments)
+    // Card Author (left side)
+    const authorDiv = document.createElement('div');
+    authorDiv.classList.add('card-author', 'text-xs', 'text-gray-500');
+    authorDiv.textContent = `- ${card.author} at ${new Date(card.created_at).toLocaleString()}`;
+    authorBadgeContainer.appendChild(authorDiv);
+
+    // Status Badge (right side)
+    console.log('[DEBUG] Card status:', card.status, 'Card ID:', card.card_id);
     if (card.status) {
         const statusBadge = document.createElement('span');
-        statusBadge.classList.add('status-badge', 'inline-block', 'text-xs', 'px-2', 'py-1', 'rounded-full', 'font-bold', 'ml-2');
+        statusBadge.classList.add('status-badge', 'inline-block', 'text-xs', 'px-2', 'py-1', 'rounded-full', 'font-bold');
 
         if (card.status === 'open') {
             statusBadge.textContent = '⚪ Open';
@@ -133,8 +138,13 @@ function createCardElement(card) {
             statusBadge.classList.add('bg-green-100', 'text-green-700');
         }
 
-        authorDiv.appendChild(statusBadge); // Append to authorDiv
+        console.log('[DEBUG] Appending badge to container, badge:', statusBadge.textContent);
+        authorBadgeContainer.appendChild(statusBadge);
+    } else {
+        console.log('[DEBUG] No status for card, skipping badge');
     }
+
+    cardDiv.appendChild(authorBadgeContainer);
 
     // Comments Section (if any)
     if (card.comments && card.comments.length > 0) {
