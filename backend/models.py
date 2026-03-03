@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Float
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 import uuid
@@ -63,3 +63,19 @@ class Comment(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
     card = relationship("Card", back_populates="comments")
+
+class TokenUsage(Base):
+    """Token Dashboard: Track API token usage per project and agent"""
+    __tablename__ = "token_usage"
+
+    id = Column(Integer, primary_key=True, index=True)
+    usage_id = Column(String(36), unique=True, index=True, default=lambda: str(uuid.uuid4()))
+    project_id = Column(String(100), index=True, nullable=False)  # e.g., "openretro", "openclaw", etc.
+    agent = Column(String(50), index=True, nullable=False)  # e.g., "vinicius", "veras", "nunes"
+    model = Column(String(100), nullable=False)  # e.g., "gpt-4", "gpt-3.5-turbo"
+    input_tokens = Column(Integer, default=0)
+    output_tokens = Column(Integer, default=0)
+    total_tokens = Column(Integer, default=0)
+    cost = Column(Float, default=0.0)  # Changed from Integer to Float for sqlite compatibility
+    timestamp = Column(DateTime(timezone=True), server_default=func.now())
+    description = Column(String(500), nullable=True)  # Optional description of the operation
