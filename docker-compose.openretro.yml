@@ -7,7 +7,6 @@ services:
     ports:
       - "9982:9982"
     volumes:
-      - ./openretro.db:/app/openretro.db
       - ./backend:/app/backend
     restart: unless-stopped
     healthcheck:
