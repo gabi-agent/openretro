@@ -121,27 +121,27 @@ function createCardElement(card) {
     authorDiv.textContent = `- ${card.author} at ${new Date(card.created_at).toLocaleString()}`;
     authorBadgeContainer.appendChild(authorDiv);
 
-    // Status Badge (right side)
-    console.log('[DEBUG] Card status:', card.status, 'Card ID:', card.card_id);
-    if (card.status) {
+    // Status Badge (right side) - Only for Better and Actions cards, NOT for Good cards
+    console.log('[DEBUG] Card status:', card.status, 'Column:', card.column_type, 'Card ID:', card.card_id);
+    if (card.status && (card.column_type === 'better' || card.column_type === 'actions')) {
         const statusBadge = document.createElement('span');
-        statusBadge.classList.add('status-badge', 'inline-block', 'text-xs', 'px-2', 'py-1', 'rounded-full', 'font-bold');
+        statusBadge.classList.add('status-badge', 'inline-block', 'text-xs', 'px-2', 'py-1', 'rounded-full', 'font-bold', 'ml-auto', 'ml-2');
 
         if (card.status === 'open') {
             statusBadge.textContent = '⚪ Open';
-            statusBadge.classList.add('bg-gray-200', 'text-gray-700');
+            statusBadge.classList.add('bg-gray-100', 'text-gray-800', 'border', 'border-gray-300');
         } else if (card.status === 'in_progress') {
             statusBadge.textContent = '🔄 In Progress';
-            statusBadge.classList.add('bg-yellow-100', 'text-yellow-700');
+            statusBadge.classList.add('bg-yellow-100', 'text-yellow-800', 'border', 'border-yellow-300');
         } else if (card.status === 'resolved') {
             statusBadge.textContent = '✅ Resolved';
-            statusBadge.classList.add('bg-green-100', 'text-green-700');
+            statusBadge.classList.add('bg-green-100', 'text-green-800', 'border', 'border-green-300');
         }
 
         console.log('[DEBUG] Appending badge to container, badge:', statusBadge.textContent);
         authorBadgeContainer.appendChild(statusBadge);
     } else {
-        console.log('[DEBUG] No status for card, skipping badge');
+        console.log('[DEBUG] Skipping badge - card type:', card.column_type, 'status:', card.status);
     }
 
     cardDiv.appendChild(authorBadgeContainer);
