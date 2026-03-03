@@ -5,6 +5,8 @@
 *.db-shm
 *.db-wal
 openretro.db
+openretro.db.backup*
+openretro.db.recovered
 memory.db
 vector_store.db
 
