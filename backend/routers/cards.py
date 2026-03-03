@@ -85,6 +85,19 @@ def unlink_cards(
     if not db_link:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Link not found")
     
+    # SECURITY: Verify both cards belong to the same session before deleting link
+    action_card = db.query(models.Card).filter(models.Card.card_id == action_card_id).first()
+    better_card = db.query(models.Card).filter(models.Card.card_id == better_card_id).first()
+    
+    if not action_card or not better_card:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="One or both cards not found")
+    
+    if action_card.session_id != better_card.session_id:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Cannot delete cross-session card link"
+        )
+    
     db.delete(db_link)
     db.commit()
     return
