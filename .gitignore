@@ -1,46 +1,35 @@
-# OpenRetro Project .gitignore
+# Python
+__pycache__/
+*.py[cod]
+*.class
+venv/
+.env
 
-# OpenRetro Core Files
+# Database
 *.db
 *.db-shm
 *.db-wal
 openretro.db
 
-# Environment & Secrets
-.env
-.env.*
-*.key
-*.pem
-*.secret
-*.token
-_secrets/
-secrets/
-
-# Logs
-*.log
-
-# Build & Cache
-__pycache__/
-*.pyc
-node_modules/
+# OpenClaw Workspace (Important!)
+memory/
+skills/
+projects/
+.clawhub/
+MEMORY.md
+PROTOCOLS.md
+TASK-QUEUE.md
+MEM0_SETUP_GUIDE.md
+HEALTH-DASHBOARD-STATUS.md
+REVIEW.md
+openretro-git/
+adauto-knowledge/
+knowledge/
 
 # IDE
 .vscode/
 .idea/
 *.swp
-*.swo
-.DS_Store
 
-# Directories (ONLY workspace files, NOT these)
-.openclaw/
-.shared/
-PROJECT-PLAN.md
-README-HealthDashboard.md
-SLACK-FORMAT.md
-SOUL.md
-TEAM-STATUS-REPORT.md
-TEAM-WORKFLOW.md
-TOOLS.md
-TROUBLESHOOTING.md
-USER.md
-WORKFLOW-TEST-PLAN.md
+# OS
+.DS_Store
