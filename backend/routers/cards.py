@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Query
 from sqlalchemy.orm import Session as DBSession
 from sqlalchemy.sql import func
 
@@ -73,8 +73,8 @@ def link_cards(
 
 @router.delete("/cards/link", status_code=status.HTTP_204_NO_CONTENT)
 def unlink_cards(
-    action_card_id: str,
-    better_card_id: str,
+    action_card_id: str = Query(...),
+    better_card_id: str = Query(...),
     db: DBSession = Depends(get_db)
 ):
     db_link = db.query(models.CardLink).filter(
