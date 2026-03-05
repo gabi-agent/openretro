@@ -1,35 +1,58 @@
-# Python
-__pycache__/
-*.py[cod]
-*.class
-venv/
-.env
-
-# Database
-*.db
-*.db-shm
-*.db-wal
-openretro.db
-
-# OpenClaw Workspace (Important!)
+# OpenClaw Workspace (Agent Specific Files)
+.openclaw/
+.shared/
+agents/
+qdrant_storage/
 memory/
 skills/
 projects/
 .clawhub/
-MEMORY.md
-PROTOCOLS.md
+*.md
+!README.md
+!docs/*.md
+!backend/*.md
+!frontend/*.md
+!**/*.md
+*.db
+*.sqlite
+*.log
+node_modules/
+venv/
+__pycache__/
+
+# Specific Agent Files
+AGENTS.md
+SOUL.md
+IDENTITY.md
+USER.md
+HEARTBEAT.md
+TOOLS.md
 TASK-QUEUE.md
-MEM0_SETUP_GUIDE.md
-HEALTH-DASHBOARD-STATUS.md
-REVIEW.md
+LEARNING-PROGRESS.md
+PROJECT-PLAN.md
+WORKFLOW-TEST-PLAN.md
+TEAM-STATUS-REPORT.md
+TEAM-WORKFLOW.md
+SLACK-FORMAT.md
+TROUBLESHOOTING.md
+README-HealthDashboard.md
+MEM0_SUCCESS
 openretro-git/
 adauto-knowledge/
 knowledge/
+mindmap/
 
-# IDE
+# Source code directories to ignore (Non-OpenRetro)
+Unico/
+unico/
+health-backend/
+health-dashboard/
+smartsolar-*/
+smartsolar_*/
+workflow-test-*/
+
+# IDE & OS
 .vscode/
 .idea/
-*.swp
-
-# OS
 .DS_Store
+*.swp
