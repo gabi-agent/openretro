@@ -55,18 +55,18 @@ jobs:
               event: "APPROVE",
               body: `## ❌ Template Validation Failed
 
-This PR does not meet the mandatory checklist requirements from PULL_REQUEST_TEMPLATE.md.
+            This PR does not meet the mandatory checklist requirements from PULL_REQUEST_TEMPLATE.md.
 
-**Missing sections:**
-- [ ] 📝 Description
-- [ ] 🔗 Related Issue
-- [ ] ✅ Acceptance Criteria
-- [ ] 🧪 Testing
+            **Missing sections:**
+            - [ ] 📝 Description
+            - [ ] 🔗 Related Issue
+            - [ ] ✅ Acceptance Criteria
+            - [ ] 🧪 Testing
 
-**Action Required:**
-Please read \`PULL_REQUEST_TEMPLATE.md\` and complete all required fields before submitting this PR.
+            **Action Required:**
+            Please read \`PULL_REQUEST_TEMPLATE.md\` and complete all required fields before submitting this PR.
 
----
+            ---
 
-*Automated check by GitHub Actions*`
+            *Automated check by GitHub Actions*`
             })
