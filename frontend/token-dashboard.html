@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenRetro - Token Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+    <div class="container mx-auto p-4">
+        <header class="flex justify-between items-center mb-6">
+            <h1 class="text-4xl font-bold text-gray-800">📊 Token Dashboard</h1>
+            <div class="flex items-center space-x-4">
+                <a href="/" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">🏠 Back to Retro</a>
+            </div>
+        </header>
+
+        <main>
+            <!-- Project Selection -->
+            <div class="mb-8 bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-xl font-bold mb-4">📁 Select Project</h2>
+                <div class="flex gap-4 items-center mb-4">
+                    <select id="project-select" class="form-input flex-1">
+                        <option value="">-- Select Project --</option>
+                    </select>
+                    <button id="refresh-projects-btn" class="btn btn-secondary">🔄 Refresh</button>
+                </div>
+            </div>
+
+            <!-- Summary Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <!-- Total Tokens -->
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <div class="text-sm text-gray-600 mb-2">🔢 Total Tokens</div>
+                    <div id="total-tokens" class="text-3xl font-bold text-blue-600">0</div>
+                    <div class="text-xs text-gray-500 mt-1">All time</div>
+                </div>
+
+                <!-- Total Cost -->
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <div class="text-sm text-gray-600 mb-2">💰 Total Cost</div>
+                    <div id="total-cost" class="text-3xl font-bold text-green-600">$0.00</div>
+                    <div class="text-xs text-gray-500 mt-1">USD</div>
+                </div>
+
+                <!-- Agent Count -->
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <div class="text-sm text-gray-600 mb-2">🤖 Active Agents</div>
+                    <div id="agent-count" class="text-3xl font-bold text-purple-600">0</div>
+                    <div class="text-xs text-gray-500 mt-1">Agents</div>
+                </div>
+            </div>
+
+            <!-- Charts Section -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <!-- By Agent Chart -->
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h3 class="text-lg font-bold mb-4">📈 Tokens by Agent</h3>
+                    <div class="h-64">
+                        <canvas id="agent-chart"></canvas>
+                    </div>
+                </div>
+
+                <!-- By Model Chart -->
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h3 class="text-lg font-bold mb-4">🤖 Tokens by Model</h3>
+                    <div class="h-64">
+                        <canvas id="model-chart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Date-wise Usage -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h3 class="text-lg font-bold mb-4">📅 Daily Token Usage</h3>
+                <div class="h-64">
+                    <canvas id="date-chart"></canvas>
+                </div>
+            </div>
+
+            <!-- Detailed Tables -->
+            <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+                <h3 class="text-lg font-bold mb-4">📊 Detailed Breakdown</h3>
+                
+                <!-- Tabs -->
+                <div class="flex gap-4 mb-4 border-b border-gray-200 pb-4">
+                    <button class="tab-btn active" data-tab="agents">🤖 By Agent</button>
+                    <button class="tab-btn" data-tab="models">🤖 By Model</button>
+                    <button class="tab-btn" data-tab="dates">📅 By Date</button>
+                </div>
+
+                <!-- Table Container -->
+                <div id="table-container">
+                    <!-- Table will be rendered here -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="modal-overlay hidden">
+        <div class="bg-white rounded-lg p-8 flex items-center">
+            <div class="spinner"></div>
+            <span class="ml-4">Loading...</span>
+        </div>
+    </div>
+
+    <script type="module" src="/js/token-dashboard.js"></script>
+</body>
+</html>

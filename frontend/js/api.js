@@ -2,6 +2,35 @@
 
 const API_BASE_URL = window.location.origin + '/api';
 
+// Simple auth management for Token Dashboard
+const AUTH_TOKEN_KEY = 'openretro_token';
+const AUTH_USER_KEY = 'openretro_user';
+
+export const auth = {
+    isAuthenticated: () => {
+        return sessionStorage.getItem(AUTH_TOKEN_KEY) !== null;
+    },
+    
+    saveToken: (token, user) => {
+        sessionStorage.setItem(AUTH_TOKEN_KEY, token);
+        sessionStorage.setItem(AUTH_USER_KEY, JSON.stringify(user));
+    },
+    
+    getToken: () => {
+        return sessionStorage.getItem(AUTH_TOKEN_KEY);
+    },
+    
+    getUser: () => {
+        const userStr = sessionStorage.getItem(AUTH_USER_KEY);
+        return userStr ? JSON.parse(userStr) : null;
+    },
+    
+    clearToken: () => {
+        sessionStorage.removeItem(AUTH_TOKEN_KEY);
+        sessionStorage.removeItem(AUTH_USER_KEY);
+    }
+};
+
 async function callApi(method, path, data = null) {
     const url = `${API_BASE_URL}/${path}`;
     const options = {
@@ -65,4 +94,21 @@ export const api = {
 
     // NEW: Status Management
     updateCardStatus: (cardId, status) => callApi('PATCH', `cards/${cardId}/status`, { status }),
+
+    // NEW: Token Dashboard Management
+    recordTokenUsage: (projectId, agent, model, tokens, cost) => 
+        callApi('POST', 'tokens', { project_id: projectId, agent, model, total_tokens: tokens, cost }),
+    
+    getTokensByProject: async (projectId, startDate, endDate) => {
+        const params = new URLSearchParams({ project_id: projectId });
+        if (startDate) params.append('start_date', startDate.toISOString());
+        if (endDate) params.append('end_date', endDate.toISOString());
+        return callApi('GET', `tokens/by-project?${params.toString()}`);
+    },
+    
+    getProjectsWithTokenUsage: async () => 
+        callApi('GET', 'tokens/projects'),
+    
+    getRecentTokenUsage: async (limit = 20) => 
+        callApi('GET', `tokens?limit=${limit}`),
 };
