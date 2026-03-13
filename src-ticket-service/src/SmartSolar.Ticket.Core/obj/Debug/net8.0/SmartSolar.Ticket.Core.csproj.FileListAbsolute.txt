@@ -1,0 +1,12 @@
+/root/.openclaw/workspace/smartsolar_ticket_service_refactor/src/SmartSolar.Ticket.Core/bin/Debug/net8.0/SmartSolar.Ticket.Core.deps.json
+/root/.openclaw/workspace/smartsolar_ticket_service_refactor/src/SmartSolar.Ticket.Core/bin/Debug/net8.0/SmartSolar.Ticket.Core.dll
+/root/.openclaw/workspace/smartsolar_ticket_service_refactor/src/SmartSolar.Ticket.Core/bin/Debug/net8.0/SmartSolar.Ticket.Core.pdb
+/root/.openclaw/workspace/smartsolar_ticket_service_refactor/src/SmartSolar.Ticket.Core/obj/Debug/net8.0/SmartSolar.Ticket.Core.GeneratedMSBuildEditorConfig.editorconfig
+/root/.openclaw/workspace/smartsolar_ticket_service_refactor/src/SmartSolar.Ticket.Core/obj/Debug/net8.0/SmartSolar.Ticket.Core.AssemblyInfoInputs.cache
+/root/.openclaw/workspace/smartsolar_ticket_service_refactor/src/SmartSolar.Ticket.Core/obj/Debug/net8.0/SmartSolar.Ticket.Core.AssemblyInfo.cs
+/root/.openclaw/workspace/smartsolar_ticket_service_refactor/src/SmartSolar.Ticket.Core/obj/Debug/net8.0/SmartSolar.Ticket.Core.csproj.CoreCompileInputs.cache
+/root/.openclaw/workspace/smartsolar_ticket_service_refactor/src/SmartSolar.Ticket.Core/obj/Debug/net8.0/SmartSolar.Ticket.Core.sourcelink.json
+/root/.openclaw/workspace/smartsolar_ticket_service_refactor/src/SmartSolar.Ticket.Core/obj/Debug/net8.0/SmartSolar.Ticket.Core.dll
+/root/.openclaw/workspace/smartsolar_ticket_service_refactor/src/SmartSolar.Ticket.Core/obj/Debug/net8.0/refint/SmartSolar.Ticket.Core.dll
+/root/.openclaw/workspace/smartsolar_ticket_service_refactor/src/SmartSolar.Ticket.Core/obj/Debug/net8.0/SmartSolar.Ticket.Core.pdb
+/root/.openclaw/workspace/smartsolar_ticket_service_refactor/src/SmartSolar.Ticket.Core/obj/Debug/net8.0/ref/SmartSolar.Ticket.Core.dll
