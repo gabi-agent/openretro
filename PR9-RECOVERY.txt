@@ -1,0 +1,7 @@
+[Nunes] PR #9 Conflicts Resolved & Merged. 
+Task: nunes-TASK-20260310-PR9
+Status: COMPLETED
+PR #9 merged into main. Deleted docs/deploy-guide.
+<memory>
+Remember: TASK-20260310-PR9 - nunes - COMPLETED - Resolved conflicts and merged PR #9.
+</memory>

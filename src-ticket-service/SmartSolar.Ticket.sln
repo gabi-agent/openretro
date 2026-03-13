@@ -1,0 +1,48 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{D4A6617F-BBCD-44A2-AB5A-770DBCADD081}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartSolar.Ticket.Core", "src\SmartSolar.Ticket.Core\SmartSolar.Ticket.Core.csproj", "{40C5BE05-7B31-4F7A-AF0F-CDD193C0E50E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartSolar.Ticket.Application", "src\SmartSolar.Ticket.Application\SmartSolar.Ticket.Application.csproj", "{4FACCDAB-196F-498D-8BB2-94661BF7BF53}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartSolar.Ticket.Infrastructure", "src\SmartSolar.Ticket.Infrastructure\SmartSolar.Ticket.Infrastructure.csproj", "{A8FE843C-9DC7-47C3-B4FC-ADADD884F09E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartSolar.Ticket.Api", "src\SmartSolar.Ticket.Api\SmartSolar.Ticket.Api.csproj", "{9110D40F-9E65-4853-9C39-F1D3306B9DFD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{40C5BE05-7B31-4F7A-AF0F-CDD193C0E50E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40C5BE05-7B31-4F7A-AF0F-CDD193C0E50E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40C5BE05-7B31-4F7A-AF0F-CDD193C0E50E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{40C5BE05-7B31-4F7A-AF0F-CDD193C0E50E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4FACCDAB-196F-498D-8BB2-94661BF7BF53}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4FACCDAB-196F-498D-8BB2-94661BF7BF53}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4FACCDAB-196F-498D-8BB2-94661BF7BF53}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4FACCDAB-196F-498D-8BB2-94661BF7BF53}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A8FE843C-9DC7-47C3-B4FC-ADADD884F09E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8FE843C-9DC7-47C3-B4FC-ADADD884F09E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8FE843C-9DC7-47C3-B4FC-ADADD884F09E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8FE843C-9DC7-47C3-B4FC-ADADD884F09E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9110D40F-9E65-4853-9C39-F1D3306B9DFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9110D40F-9E65-4853-9C39-F1D3306B9DFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9110D40F-9E65-4853-9C39-F1D3306B9DFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9110D40F-9E65-4853-9C39-F1D3306B9DFD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{40C5BE05-7B31-4F7A-AF0F-CDD193C0E50E} = {D4A6617F-BBCD-44A2-AB5A-770DBCADD081}
+		{4FACCDAB-196F-498D-8BB2-94661BF7BF53} = {D4A6617F-BBCD-44A2-AB5A-770DBCADD081}
+		{A8FE843C-9DC7-47C3-B4FC-ADADD884F09E} = {D4A6617F-BBCD-44A2-AB5A-770DBCADD081}
+		{9110D40F-9E65-4853-9C39-F1D3306B9DFD} = {D4A6617F-BBCD-44A2-AB5A-770DBCADD081}
+	EndGlobalSection
+EndGlobal
